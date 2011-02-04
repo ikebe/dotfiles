@@ -26,12 +26,14 @@
 ;;(define-key global-map "\C-h" 'delete-backward-char)
 (define-key global-map "\M-g" 'goto-line)
 (keyboard-translate ?\C-h ?\C-?)
-(keyboard-translate ?\C-? ?\C-h)
+(global-set-key "\C-h" nil)
+(global-set-key "\M-h" 'help-command)
 
 ;; skk
 ;; 自動設定に頼る
-;;(require 'skk-autoloads)a
+;;(require 'skk-autoloads)
 ;;(setq default-input-method "japanese-skk")
+(setq skk-preload t)
 (setq skk-server-host "localhost")
 (setq skk-server-portnum 1178)
 (setq skk-egg-like-newline t)
@@ -120,3 +122,7 @@
 ;; magit
 (autoload 'magit-status "magit" "An emacs mode for git" t)
 (defalias 'git-status 'magit-status)
+
+;; yasnippet
+;; http://yasnippet.googlecode.com/
+(require 'yasnippet-bundle)

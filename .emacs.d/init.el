@@ -14,7 +14,9 @@
 (blink-cursor-mode 0) 
 (display-time)
 (recentf-mode)
+(iswitchb-mode 1)
 (setq visible-bell t)
+;;(mac-input-method-mode 1)
 
 (setq inhibit-startup-message t)
 (setq-default indent-tabs-mode nil)
@@ -39,14 +41,40 @@
 (setq skk-egg-like-newline t)
 
 ;; font
-;; http://sakito.jp/emacs/emacs23.html#id15
-(create-fontset-from-ascii-font "Menlo-14:weight=normal:slant=normal" nil "menlokakugo")
-(set-fontset-font "fontset-menlokakugo"
-                  'unicode
-                  (font-spec :family "Hiragino Kaku Gothic ProN" :size 16)
-                  nil
-                  'append)
-(add-to-list 'default-frame-alist '(font . "fontset-menlokakugo"))
+;; http://d.hatena.ne.jp/setoryohei/20110117/1295336454
+;; フォントセットを作る
+(let* ((fontset-name "myfonts") ; フォントセットの名前
+       (size 12) ; ASCIIフォントのサイズ [9/10/12/14/15/17/19/20/...]
+       (asciifont "Menlo") ; ASCIIフォント
+       (jpfont "Hiragino Maru Gothic ProN") ; 日本語フォント
+       (font (format "%s-%d:weight=normal:slant=normal" asciifont size))
+       (fontspec (font-spec :family asciifont))
+       (jp-fontspec (font-spec :family jpfont)) 
+       (fsn (create-fontset-from-ascii-font font nil fontset-name)))
+  (set-fontset-font fsn 'japanese-jisx0213.2004-1 jp-fontspec)
+  (set-fontset-font fsn 'japanese-jisx0213-2 jp-fontspec)
+  (set-fontset-font fsn '(#x0080 . #x024F) fontspec) ; 分音符付きラテン
+  (set-fontset-font fsn '(#x0370 . #x03FF) fontspec) ; ギリシャ文字
+  )
+
+;; デフォルトのフレームパラメータでフォントセットを指定
+(add-to-list 'default-frame-alist '(font . "fontset-myfonts"))
+
+;; フォントサイズの比を設定
+(setq face-font-rescale-alist
+      '(("^-apple-hiragino.*" . 1.2)
+        (".*osaka-bold.*" . 1.2)
+        (".*osaka-medium.*" . 1.2)
+        (".*courier-bold-.*-mac-roman" . 1.0)
+        (".*monaco cy-bold-.*-mac-cyrillic" . 0.9)
+        (".*monaco-bold-.*-mac-roman" . 0.9)
+        ("-cdac$" . 1.3)))
+
+;; デフォルトフェイスにフォントセットを設定
+;; # これは起動時に default-frame-alist に従ったフレームが
+;; # 作成されない現象への対処
+(set-face-font 'default "fontset-myfonts")
+
 
 ;; color
 (global-font-lock-mode t)
@@ -54,7 +82,7 @@
       (append (list
        '(background-color . "ivory")
        '(foreground-color . "black")
-       '(cursor-color . "navy")
+       '(cursor-color . "gray")
        '(width . 80)
        '(height . 40)
        )

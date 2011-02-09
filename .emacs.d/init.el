@@ -129,6 +129,8 @@
 (setq auto-mode-alist
        (append '(("\\.cgi$" . cperl-mode))  auto-mode-alist ))
 (setq auto-mode-alist
+       (append '(("\\.psgi$" . cperl-mode))  auto-mode-alist ))
+(setq auto-mode-alist
        (append '(("\\.t$" . cperl-mode))  auto-mode-alist ))
 (setq interpreter-mode-alist
       (append '(("perl" . cperl-mode))
@@ -153,4 +155,13 @@
 
 ;; yasnippet
 ;; http://yasnippet.googlecode.com/
-(require 'yasnippet-bundle)
+(require 'yasnippet)
+(yas/initialize)
+(yas/load-directory "~/.emacs.d/snippets")
+(yas/define-snippets 'nxhtml-mode nil 'html-mode)
+
+;; nxhtml
+;;(load-library "nxhtml/autostart")
+(load-library "nxhtml/autostart")
+(setq auto-mode-alist
+       (append '(("\\.tt$" . nxhtml-mode))  auto-mode-alist ))

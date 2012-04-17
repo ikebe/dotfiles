@@ -39,6 +39,7 @@
 (setq skk-server-host "localhost")
 (setq skk-server-portnum 1178)
 (setq skk-egg-like-newline t)
+(setq mac-pass-control-to-system nil)
 
 ;; font
 ;; http://d.hatena.ne.jp/setoryohei/20110117/1295336454

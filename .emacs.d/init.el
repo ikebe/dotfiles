@@ -7,6 +7,26 @@
 (setenv "PATH"
         (concat '"~/perl5/perlbrew/bin:/usr/local/bin:" (getenv "PATH")))
 
+
+(require 'package)
+;; MELPAを追加
+(add-to-list 'package-archives 
+             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(package-initialize)
+;;(require 'melpa)
+
+(add-to-list 'load-path "~/.emacs.d/el-get/el-get")
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp)))
+
+(add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+(el-get 'sync)
+
+
 ;; misc
 (line-number-mode 1)
 (column-number-mode 1)
@@ -16,6 +36,7 @@
 (recentf-mode)
 (iswitchb-mode 1)
 (setq visible-bell t)
+;;(global-whitespace-mode 1)
 ;;(mac-input-method-mode 1)
 
 (setq inhibit-startup-message t)
@@ -32,14 +53,15 @@
 (global-set-key "\M-h" 'help-command)
 
 ;; skk
-;; 自動設定に頼る
-;;(require 'skk-autoloads)
-;;(setq default-input-method "japanese-skk")
+(require 'skk-autoloads)
+(setq default-input-method "japanese-skk")
 (setq skk-preload t)
 (setq skk-server-host "localhost")
 (setq skk-server-portnum 1178)
 (setq skk-egg-like-newline t)
 (setq mac-pass-control-to-system nil)
+
+;;(setq mac-pass-control-to-system t)
 
 ;; font
 ;; http://d.hatena.ne.jp/setoryohei/20110117/1295336454
@@ -113,7 +135,6 @@
 (setq cperl-indent-level 4)
 (setq cperl-indent-parens-as-block t)
 (setq cperl-tab-always-indent t)
-
 (setq cperl-hairy t)
 (setq cperl-highlight-variables-indiscriminately t)
 ;;(setq cperl-electric-parens t)
@@ -137,18 +158,16 @@
       (append '(("perl" . cperl-mode))
               interpreter-mode-alist ))
 
-(defalias 'perldoc 'cperl-perldoc)
-
 ;; migemo
 (load-library "migemo")
 (setq migemo-command "cmigemo")
 (setq migemo-options '("-q" "--emacs" "-i" "\a"))
-(setq migemo-dictionary "/usr/local/share/migemo/euc-jp/migemo-dict")
+(setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict")
 (setq migemo-user-dictionary nil)
 (setq migemo-regex-dictionary nil)
 
 ;; psvn
-(autoload 'svn-status "psvn" "a emacs mode for subversion" t)
+;;(autoload 'svn-status "psvn" "a emacs mode for subversion" t)
 
 ;; magit
 (autoload 'magit-status "magit" "An emacs mode for git" t)
@@ -156,13 +175,13 @@
 
 ;; yasnippet
 ;; http://yasnippet.googlecode.com/
-(require 'yasnippet)
-(yas/initialize)
-(yas/load-directory "~/.emacs.d/snippets")
-(yas/define-snippets 'nxhtml-mode nil 'html-mode)
+;; (require 'yasnippet)
+;; (yas/initialize)
+;; (yas/load-directory "~/.emacs.d/snippets")
+;; (yas/define-snippets 'nxhtml-mode nil 'html-mode)
 
 ;; nxhtml
 ;;(load-library "nxhtml/autostart")
-(load-library "nxhtml/autostart")
-(setq auto-mode-alist
-       (append '(("\\.tt$" . nxhtml-mode))  auto-mode-alist ))
+;; (load-library "nxhtml/autostart")
+;; (setq auto-mode-alist
+;;        (append '(("\\.tt$" . nxhtml-mode))  auto-mode-alist ))

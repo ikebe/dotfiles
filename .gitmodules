@@ -1,3 +1,0 @@
-[submodule ".emacs.d/lib/html5-el"]
-	path = .emacs.d/lib/html5-el
-	url = git://github.com/hober/html5-el.git

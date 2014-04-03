@@ -1,19 +1,14 @@
 (set-language-environment 'Japanese)
 (prefer-coding-system 'utf-8)
 
-(setq load-path (append '("~/.emacs.d/lib") load-path))
-(setq exec-path (append 
-                 '("~/perl5/perlbrew/bin" "/usr/local/bin") exec-path))
-(setenv "PATH"
-        (concat '"~/perl5/perlbrew/bin:/usr/local/bin:" (getenv "PATH")))
-
+;; env
+(setenv "GOROOT" "/usr/local/Cellar/go/1.2.1/libexec")
+(setenv "GOPATH" (expand-file-name "~/go"))
 
 (require 'package)
-;; MELPAを追加
 (add-to-list 'package-archives 
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
-;;(require 'melpa)
 
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
 (unless (require 'el-get nil 'noerror)
@@ -24,8 +19,28 @@
     (eval-print-last-sexp)))
 
 (add-to-list 'el-get-recipe-path "~/.emacs.d/el-get-user/recipes")
+
+;; auto install packages.
+(el-get 'sync '(go-mode magit))
 (el-get 'sync)
 
+(require 'cl)
+(defvar installing-package-list
+  '(
+    exec-path-from-shell
+    migemo
+    ))
+
+(let ((not-installed (loop for x in installing-package-list
+                           when (not (package-installed-p x))
+                           collect x)))
+  (when not-installed
+    (package-refresh-contents)
+    (dolist (pkg not-installed)
+      (package-install pkg))))
+
+;;path
+(exec-path-from-shell-initialize)
 
 ;; misc
 (line-number-mode 1)
@@ -41,6 +56,7 @@
 
 (setq inhibit-startup-message t)
 (setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
 (setq-default transient-mark-mode t)
 
 ;; global key settiongs.
@@ -103,13 +119,13 @@
 (global-font-lock-mode t)
 (setq default-frame-alist
       (append (list
-       '(background-color . "ivory")
-       '(foreground-color . "black")
-       '(cursor-color . "gray")
-       '(width . 80)
-       '(height . 40)
-       )
-      default-frame-alist))
+               '(background-color . "ivory")
+               '(foreground-color . "black")
+               '(cursor-color . "gray")
+               '(width . 80)
+               '(height . 40)
+               )
+              default-frame-alist))
 
 ;; chmod +x
 (add-hook 'after-save-hook
@@ -143,17 +159,17 @@
 ;;(setq cperl-auto-newline t)
 
 (setq auto-mode-alist
-       (append '(("\\.pm$" . cperl-mode))  auto-mode-alist ))
+      (append '(("\\.pm$" . cperl-mode))  auto-mode-alist ))
 (setq auto-mode-alist
-       (append '(("\\.pl$" . cperl-mode))  auto-mode-alist ))
+      (append '(("\\.pl$" . cperl-mode))  auto-mode-alist ))
 (setq auto-mode-alist
-       (append '(("\\.PL$" . cperl-mode))  auto-mode-alist ))
+      (append '(("\\.PL$" . cperl-mode))  auto-mode-alist ))
 (setq auto-mode-alist
-       (append '(("\\.cgi$" . cperl-mode))  auto-mode-alist ))
+      (append '(("\\.cgi$" . cperl-mode))  auto-mode-alist ))
 (setq auto-mode-alist
-       (append '(("\\.psgi$" . cperl-mode))  auto-mode-alist ))
+      (append '(("\\.psgi$" . cperl-mode))  auto-mode-alist ))
 (setq auto-mode-alist
-       (append '(("\\.t$" . cperl-mode))  auto-mode-alist ))
+      (append '(("\\.t$" . cperl-mode))  auto-mode-alist ))
 (setq interpreter-mode-alist
       (append '(("perl" . cperl-mode))
               interpreter-mode-alist ))
@@ -185,3 +201,10 @@
 ;; (load-library "nxhtml/autostart")
 ;; (setq auto-mode-alist
 ;;        (append '(("\\.tt$" . nxhtml-mode))  auto-mode-alist ))
+
+
+;; (add-hook 'go-mode-hook
+;;           '(lambda()
+;;             (setq tab-width 4)
+;;             (setq indent-tabs-mode t)
+;;             ))
